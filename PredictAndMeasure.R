@@ -1,3 +1,5 @@
+##TODO predictAndMeasure function was taken fron the internet. Must refactor into using dplyr. Or check if there's a better alternative online 
+
 predictAndMeasure = function(model,model.label,trainingData,ytrain,testData,ytest,tm , grid = NULL,verbose=F) {
   pred = predict(model , trainingData) 
   RMSE.train = RMSE(obs = ytrain , pred = pred)

@@ -16,13 +16,14 @@ Test <- getTestData()
 
 ## Linear regression and variants
 
+modelFrame <- data.frame(ModelName = character())
+
+
 simpleLm <- GetSimpleLinearRegressionModel(Train)
 leapForward <- GetForwardSelectionLinearRegressionModel(Train)
 pls <- GetPartialLeastSqare(Train)
 pcr <- GetPrincipalComponenRegression(Train)
 lasso <- GetLasso(Train)
-
-
 
 ## shows plot for the tuning parameter
 plot(pcr, metric = "RMSE", plotType = "line")
@@ -30,7 +31,7 @@ plot(pls, metric = "RMSE", plotType = "line")
 plot(lasso, metric = "RMSE", plotType = "line")
 
 
-
+##TODO predictAndMeasure function was taken fron the internet. Must refactor into using dplyr. Or check if there's a better alternative online 
 verbose = F 
 ptm <- proc.time()
 tm = proc.time() - ptm
@@ -43,3 +44,9 @@ tm = proc.time() - ptm
 perfGrid <- predictAndMeasure(pcr, "pcr", Train, Train$Solubility, Test, Test$Solubility, tm,grid=perfGrid, verbose)
 tm = proc.time() - ptm
 perfGrid <- predictAndMeasure(lasso, "lasso", Train, Train$Solubility, Test, Test$Solubility, tm,grid=perfGrid, verbose)
+
+
+allResamples <- resamples(list("SimpleLm" = simpleLm, "leapForward" = leapForward, "pls" = pls, "pcr" = pcr, "lasso" = lasso))
+parallelplot(allResamples)
+
+perfGrid
